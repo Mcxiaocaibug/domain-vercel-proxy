@@ -1,9 +1,0 @@
-{
-    "name": "domain-vercel-proxy",
-    "version": "1.0.0",
-    "description": "A robust domain proxy for Vercel",
-    "license": "MIT",
-    "dependencies": {
-        "http-proxy-middleware": "^2.0.6"
-    }
-}
