@@ -1,14 +1,14 @@
 # Domain Vercel Proxy
 
-这是一个基于 Vercel 的轻量级反向代理服务，专为解决跨域资源共享 (CORS) 问题和提供稳定的 API 访问入口而设计。
+这是一个基于 Vercel Serverless Function 的高性能反向代理服务，专为解决跨域资源共享 (CORS) 问题和 WebSocket 连接问题而设计。
 
-核心功能是将所有流量无缝转发至后端服务：`https://many-tammy-neptunium-95b946c4.koyeb.app`。
+核心功能是将所有流量（包括 HTTP 和 WebSocket）无缝转发至后端服务：`https://many-tammy-neptunium-95b946c4.koyeb.app`。
 
 ## ✨ 特性
 
--   🚀 **高性能代理**: 利用 Vercel 的全球边缘网络进行请求分发。
--   🔓 **CORS 全开**: 自动处理跨域请求头，允许任意源访问 API。
--   🚫 **零缓存设计**: 强制禁用缓存 (`Cache-Control: no-store`)，确保获取的数据永远是最新的。
+-   🚀 **全功能代理**: 使用 `http-proxy-middleware` 实现，支持 HTTP、HTTPS 和 WebSocket 协议。
+-   🔓 **CORS 全开**: 自动处理跨域请求头。
+-   🚫 **零缓存设计**: 强制禁用缓存 (`Cache-Control: no-store`)，确保动态内容（如探针状态）实时更新。
 -   ⚡ **简单易用**: 零配置，一键部署即可使用。
 
 ## 🛠️ 使用指南
@@ -27,16 +27,14 @@ GET https://many-tammy-neptunium-95b946c4.koyeb.app/api/v1/resource
 GET https://your-project.vercel.app/api/v1/resource
 ```
 
-所有路径参数和查询参数都会被透传。
+所有路径参数、查询参数和 WebSocket 连接 (`ws://` / `wss://`) 都会被自动透传。
 
-## ⚙️ 配置说明
+## ⚙️ 架构说明
 
-核心配置位于 `vercel.json` 文件中：
+本项目不再使用简单的 `vercel.json` 重写规则，而是使用 Vercel Serverless Function (`api/index.js`) 进行流量转发，以获得更好的协议支持和控制能力。
 
--   **Rewrites**: 所有请求 (`/(.*)`) 都会被重写并转发到目标后端。
--   **Headers**:
-    -   `Access-Control-Allow-Origin: *`
-    -   `Cache-Control: no-store, no-cache, must-revalidate, proxy-revalidate` (防止动态内容被缓存)
+-   **依赖**: `http-proxy-middleware`
+-   **入口**: `api/index.js` Handles all requests via `vercel.json` rewrite.
 
 ## 📦 部署
 
