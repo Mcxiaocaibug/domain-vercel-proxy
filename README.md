@@ -1,45 +1,49 @@
-# Vercel Proxy for Google Generative AI API
+# Domain Vercel Proxy
 
-这是一个使用Vercel部署的代理服务，用于访问Google的生成式AI API（Gemini等）。
+这是一个基于 Vercel 的轻量级反向代理服务，专为解决跨域资源共享 (CORS) 问题和提供稳定的 API 访问入口而设计。
 
-## 功能特点
+核心功能是将所有流量无缝转发至后端服务：`https://many-tammy-neptunium-95b946c4.koyeb.app`。
 
-- 转发所有请求到 `https://many-tammy-neptunium-95b946c4.koyeb.app`
-- 自动添加CORS相关的响应头以支持跨域请求
-- 简单轻量，易于部署和维护
+## ✨ 特性
 
-## 部署方法
+-   🚀 **高性能代理**: 利用 Vercel 的全球边缘网络进行请求分发。
+-   🔓 **CORS 全开**: 自动处理跨域请求头，允许任意源访问 API。
+-   🚫 **零缓存设计**: 强制禁用缓存 (`Cache-Control: no-store`)，确保获取的数据永远是最新的。
+-   ⚡ **简单易用**: 零配置，一键部署即可使用。
 
-1. Fork本仓库或克隆到本地
-2. 使用Vercel CLI部署，或者连接到Vercel平台进行自动部署
-3. 部署完成后，使用分配的Vercel域名即可访问API
+## 🛠️ 使用指南
 
-## 使用方法
+部署完成后，使用您的 Vercel 域名替换原始 API 地址即可。
 
-部署成功后，只需将原本指向`https://generativelanguage.googleapis.com/`的请求改为指向您的Vercel域名即可。
+**原始请求示例：**
 
-例如：
 ```
-// 原API地址
-https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent
-
-// 更改为
-https://your-vercel-app.vercel.app/v1beta/models/gemini-pro:generateContent
+GET https://many-tammy-neptunium-95b946c4.koyeb.app/api/v1/resource
 ```
 
-## 配置说明
+**代理请求示例：**
 
-`vercel.json`文件包含以下配置：
+```
+GET https://your-project.vercel.app/api/v1/resource
+```
 
-- `rewrites`: 将所有请求重写并转发到 `https://many-tammy-neptunium-95b946c4.koyeb.app`
-- `headers`: 添加CORS相关头信息以支持跨域请求
+所有路径参数和查询参数都会被透传。
 
-## 注意事项
+## ⚙️ 配置说明
 
-- 此代理仅转发请求，您仍需要有效的API密钥才能调用Google的API
-- 仅用于开发和学习目的，请遵守Google API使用条款
-- 个人或企业生产环境建议直接对接官方API
+核心配置位于 `vercel.json` 文件中：
 
-## 许可证
+-   **Rewrites**: 所有请求 (`/(.*)`) 都会被重写并转发到目标后端。
+-   **Headers**:
+    -   `Access-Control-Allow-Origin: *`
+    -   `Cache-Control: no-store, no-cache, must-revalidate, proxy-revalidate` (防止动态内容被缓存)
 
-MIT
+## 📦 部署
+
+您可以直接 Fork 本仓库到您的 GitHub，然后在 Vercel 中导入即可自动部署。
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMcxiaocaibug%2Fdomain-vercel-proxy)
+
+## 📝 许可证
+
+MIT License
